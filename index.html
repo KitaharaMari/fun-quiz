@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>趣味人格测试合集</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{
+  font-family:'Noto Sans SC','PingFang SC',sans-serif;
+  background:#0a0a14;
+  color:#e0d6f5;
+  min-height:100vh;
+  padding:40px 20px 80px;
+}
+
+/* ── HEADER ──────────────────────────── */
+.hero{text-align:center;margin-bottom:60px;}
+.hero-badge{
+  display:inline-block;font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:#a87de8;background:rgba(124,92,191,0.15);
+  border:1px solid #2a2250;border-radius:20px;
+  padding:5px 18px;margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(28px,6vw,52px);font-weight:900;line-height:1.2;margin-bottom:14px;
+  background:linear-gradient(135deg,#fff 0%,#c8a8ff 50%,#7c5cbf 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero p{color:#9988bb;font-size:16px;max-width:520px;margin:0 auto;line-height:1.7;}
+
+/* ── SECTION HEADER ─────────────────── */
+.section-label{
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:#5566aa;margin:52px 0 20px;
+  display:flex;align-items:center;gap:14px;
+}
+.section-label::after{
+  content:'';flex:1;height:1px;background:linear-gradient(90deg,#2a2250,transparent);
+}
+
+/* ── GRID ────────────────────────────── */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:16px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+/* ── CARD ────────────────────────────── */
+.card{
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  text-decoration:none;
+  display:block;
+  aspect-ratio:3/4;
+  transition:transform .25s,box-shadow .25s;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.card:hover{
+  transform:translateY(-6px) scale(1.02);
+  box-shadow:0 16px 48px rgba(0,0,0,0.6);
+}
+.card-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:80px;
+}
+.card-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,rgba(0,0,0,0.3) 60%,transparent 100%);
+}
+.card-body{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:16px;
+}
+.card-category{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:6px;opacity:0.75;
+}
+.card-title{font-size:17px;font-weight:700;line-height:1.3;color:#fff;margin-bottom:4px;}
+.card-sub{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.4;}
+.card-badge{
+  position:absolute;top:12px;right:12px;
+  font-size:10px;letter-spacing:1px;
+  background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:10px;padding:3px 8px;color:rgba(255,255,255,0.7);
+}
+
+/* ── FOOTER ──────────────────────────── */
+.footer{
+  text-align:center;margin-top:64px;
+  font-size:12px;color:#2a2250;
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">PERSONALITY QUIZ HUB</div>
+  <h1>你更像谁？</h1>
+  <p>17套趣味人格测试，从动漫到偶像，从战场到内阁。<br>选一个，跟着直觉走。</p>
+</div>
+
+<!-- ═══ 动漫·战斗 ═══ -->
+<div class="section-label" style="max-width:1200px;margin-left:auto;margin-right:auto">动漫 · 战斗与冒险</div>
+<div class="grid">
+
+  <a class="card" href="quiz_kimetsu.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#1a0808,#3d1010,#1a0808)">🌸</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(60,10,10,0.95) 0%,rgba(20,5,5,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#f07050">鬼灭之刃</div>
+      <div class="card-title">你更像哪位鬼杀队士？</div>
+      <div class="card-sub">6种斩鬼的方式，6种守护的信念</div>
+    </div>
+    <div class="card-badge">6 角色</div>
+  </a>
+
+  <a class="card" href="quiz_jjk.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#10081a,#2a1050,#10081a)">👊</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(20,8,40,0.95) 0%,rgba(10,4,20,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#b86cf0">咒术回战</div>
+      <div class="card-title">你的咒力特质是哪种？</div>
+      <div class="card-sub">你的术式，早已写在性格里</div>
+    </div>
+    <div class="card-badge">6 角色</div>
+  </a>
+
+  <a class="card" href="quiz_aot.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#100a04,#2a1a08,#100a04)">⚔️</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(20,12,4,0.95) 0%,rgba(10,6,2,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#c49040">进击的巨人</div>
+      <div class="card-title">你是哪种面对世界的方式？</div>
+      <div class="card-sub">自由、牺牲与无法回头的选择</div>
+    </div>
+    <div class="card-badge">6 角色</div>
+  </a>
+
+  <a class="card" href="quiz_eva.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#08041a,#1a1040,#08041a)">🔮</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(12,8,30,0.95) 0%,rgba(6,4,15,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#9060e8">新世纪福音战士</div>
+      <div class="card-title">你的AT结界构型是？</div>
+      <div class="card-sub">使徒、人类补完与灵魂深处的伤</div>
+    </div>
+    <div class="card-badge">5 角色</div>
+  </a>
+
+</div>
+
+<!-- ═══ 动漫·音乐与青春 ═══ -->
+<div class="section-label" style="max-width:1200px;margin-left:auto;margin-right:auto">动漫 · 音乐与青春</div>
+<div class="grid">
+
+  <a class="card" href="mygo_quiz.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#0d0d1a,#1a1035,#0d0d1a)">🎸</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(10,8,25,0.95) 0%,rgba(5,4,12,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#a87de8">BanG Dream! MyGO!!!!!</div>
+      <div class="card-title">你更像MyGO中的谁？</div>
+      <div class="card-sub">6位成员，6种羁绊的方式</div>
+    </div>
+    <div class="card-badge">6 角色</div>
+  </a>
+
+  <a class="card" href="quiz_roselia.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#1a0410,#400825,#1a0410)">🌹</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(30,4,16,0.95) 0%,rgba(15,2,8,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#e86898">BanG Dream! Roselia</div>
+      <div class="card-title">你更像Roselia中的谁？</div>
+      <div class="card-sub">玫瑰、荆棘与完美的执念</div>
+    </div>
+    <div class="card-badge">5 角色</div>
+  </a>
+
+  <a class="card" href="quiz_bocchi.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#1a0415,#3a0830,#1a0415)">🎸</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(28,4,20,0.95) 0%,rgba(14,2,10,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#f078c0">孤独摇滚</div>
+      <div class="card-title">你是结束乐队的哪个灵魂？</div>
+      <div class="card-sub">社恐吉他手与那个吵闹的夏天</div>
+    </div>
+    <div class="card-badge">5 角色</div>
+  </a>
+
+  <a class="card" href="quiz_wa2.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#04101a,#082535,#04101a)">🎹</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(4,14,25,0.95) 0%,rgba(2,7,12,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#80c4f5">白色相簿2</div>
+      <div class="card-title">你是这段故事里的谁？</div>
+      <div class="card-sub">一段无法完美的冬日爱情</div>
+    </div>
+    <div class="card-badge">5 角色</div>
+  </a>
+
+</div>
+
+<!-- ═══ 动漫·日常与校园 ═══ -->
+<div class="section-label" style="max-width:1200px;margin-left:auto;margin-right:auto">动漫 · 日常与校园</div>
+<div class="grid">
+
+  <a class="card" href="quiz_kaguya.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#1a0404,#380808,#1a0404)">👑</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(30,4,4,0.95) 0%,rgba(15,2,2,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#f06464">辉夜大小姐想让我告白</div>
+      <div class="card-title">你的恋爱策略是哪种？</div>
+      <div class="card-sub">告白是战争，爱是博弈</div>
+    </div>
+    <div class="card-badge">6 角色</div>
+  </a>
+
+  <a class="card" href="quiz_railgun.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#041018,#082030,#041018)">⚡</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(4,14,24,0.95) 0%,rgba(2,7,12,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#55baff">某科学的超电磁炮</div>
+      <div class="card-title">你的能力类型是？</div>
+      <div class="card-sub">学园都市，能力与人性的交叉</div>
+    </div>
+    <div class="card-badge">5 角色</div>
+  </a>
+
+  <a class="card" href="quiz_spyfamily.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#181004,#302008,#181004)">🕵️</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(24,14,4,0.95) 0%,rgba(12,7,2,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#e8c040">间谍过家家</div>
+      <div class="card-title">你是福杰家的哪一员？</div>
+      <div class="card-sub">秘密、谎言与这个真实的家</div>
+    </div>
+    <div class="card-badge">5 角色</div>
+  </a>
+
+  <a class="card" href="quiz_granblue.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#041018,#082535,#041018)">🌊</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(4,14,24,0.95) 0%,rgba(2,7,12,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#3aaaf5">碧蓝之海</div>
+      <div class="card-title">你是潜水部哪种人？</div>
+      <div class="card-sub">脱光了才能下水，也才能做自己</div>
+    </div>
+    <div class="card-badge">5 角色</div>
+  </a>
+
+  <a class="card" href="quiz_medalist.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#141002,#2a2004,#141002)">⛸️</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(20,14,2,0.95) 0%,rgba(10,7,1,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#e8d060">金牌得主</div>
+      <div class="card-title">你如何面对梦想？</div>
+      <div class="card-sub">冰面上每一次旋转都是诘问</div>
+    </div>
+    <div class="card-badge">5 角色</div>
+  </a>
+
+</div>
+
+<!-- ═══ 偶像·音乐 ═══ -->
+<div class="section-label" style="max-width:1200px;margin-left:auto;margin-right:auto">偶像 · 音乐</div>
+<div class="grid">
+
+  <a class="card" href="quiz_tnt.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#181002,#3a2004,#181002)">⭐</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(28,16,2,0.95) 0%,rgba(14,8,1,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#f5a850">时代少年团 TNT</div>
+      <div class="card-title">你是TNT哪位成员的同款？</div>
+      <div class="card-sub">少年强则国强，9题测出灵魂同款</div>
+    </div>
+    <div class="card-badge">7 成员</div>
+  </a>
+
+</div>
+
+<!-- ═══ 政治·领导力 ═══ -->
+<div class="section-label" style="max-width:1200px;margin-left:auto;margin-right:auto">政治 · 领导风格</div>
+<div class="grid">
+
+  <a class="card" href="quiz_psc.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#1a0404,#3d0808,#1a0404)">🐉</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(30,4,4,0.95) 0%,rgba(15,2,2,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#e85050">中共政治局常委</div>
+      <div class="card-title">你的领导风格更像哪位常委？</div>
+      <div class="card-sub">治大国若烹小鲜——8题测施政哲学</div>
+    </div>
+    <div class="card-badge">7 人物</div>
+  </a>
+
+  <a class="card" href="quiz_cabinet_jp.html">
+    <div class="card-bg" style="background:linear-gradient(135deg,#04081a,#081535,#04081a)">🏛️</div>
+    <div class="card-overlay" style="background:linear-gradient(to top,rgba(4,8,26,0.95) 0%,rgba(2,4,13,0.4) 55%,transparent 100%)"></div>
+    <div class="card-body">
+      <div class="card-category" style="color:#5080e8">日本内阁（石破内阁）</div>
+      <div class="card-title">你的执政风格更像哪位大臣？</div>
+      <div class="card-sub">从外交到安全，8题看你的施政取向</div>
+    </div>
+    <div class="card-badge">6 人物</div>
+  </a>
+
+</div>
+
+<div class="footer">
+  所有测试均为非官方娱乐内容 &nbsp;·&nbsp; 结果仅供参考，不代表任何官方立场
+</div>
+
+</body>
+</html>

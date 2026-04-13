@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>你更像MyGO中的谁？</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #0d0d1a;
+    --card: #141428;
+    --card2: #1a1a35;
+    --accent: #7c5cbf;
+    --accent2: #a87de8;
+    --highlight: #e8d5ff;
+    --text: #e0d6f5;
+    --subtext: #9988bb;
+    --border: #2a2250;
+    --glow: rgba(124, 92, 191, 0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(100, 60, 180, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(60, 80, 180, 0.10) 0%, transparent 60%);
+  }
+
+  /* ─── SCREENS ─────────────────────────────────────────── */
+  .screen { display: none; width: 100%; max-width: 680px; animation: fadeIn .45s ease; }
+  .screen.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── INTRO ────────────────────────────────────────────── */
+  .intro-badge {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent2); background: rgba(124,92,191,0.15);
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 5px 16px; margin-bottom: 28px;
+  }
+  .intro-title {
+    font-size: clamp(26px, 6vw, 42px); font-weight: 700;
+    line-height: 1.3; text-align: center; margin-bottom: 10px;
+    background: linear-gradient(135deg, #e8d5ff 0%, #a87de8 60%, #7c5cbf 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .intro-sub {
+    color: var(--subtext); font-size: 15px; text-align: center;
+    line-height: 1.7; max-width: 480px; margin-bottom: 36px;
+  }
+  .intro-chars {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+    margin-bottom: 40px;
+  }
+  .char-chip {
+    padding: 7px 16px; border-radius: 20px; font-size: 13px;
+    border: 1px solid var(--border); background: var(--card2);
+    color: var(--subtext); transition: all .25s;
+  }
+  .char-chip:hover { border-color: var(--accent); color: var(--accent2); }
+
+  .btn-start {
+    padding: 15px 48px; border-radius: 12px; border: none;
+    background: linear-gradient(135deg, #7c5cbf, #a87de8);
+    color: #fff; font-size: 16px; font-weight: 600;
+    cursor: pointer; letter-spacing: 1px;
+    box-shadow: 0 0 28px var(--glow);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(168,125,232,0.5); }
+
+  /* ─── PROGRESS ─────────────────────────────────────────── */
+  .progress-wrap {
+    width: 100%; margin-bottom: 28px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .progress-bar {
+    flex: 1; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, #7c5cbf, #a87de8);
+    transition: width .4s ease;
+  }
+  .progress-label { color: var(--subtext); font-size: 13px; white-space: nowrap; }
+
+  /* ─── QUESTION CARD ────────────────────────────────────── */
+  .q-card {
+    width: 100%; background: var(--card);
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 32px 28px; margin-bottom: 12px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+  .q-tag {
+    font-size: 11px; letter-spacing: 2px; color: var(--accent);
+    margin-bottom: 14px; display: block;
+  }
+  .q-text {
+    font-size: clamp(16px, 3vw, 19px); font-weight: 500;
+    line-height: 1.6; color: var(--highlight); margin-bottom: 24px;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    padding: 14px 18px; border-radius: 12px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card2);
+    color: var(--text); font-size: 14px; line-height: 1.5;
+    transition: all .22s; text-align: left; position: relative;
+    overflow: hidden;
+  }
+  .opt::before {
+    content: ''; position: absolute; left: 0; top: 0;
+    width: 3px; height: 100%; background: var(--accent);
+    transform: scaleY(0); transition: transform .22s;
+  }
+  .opt:hover { border-color: var(--accent); background: rgba(124,92,191,0.1); padding-left: 22px; }
+  .opt:hover::before { transform: scaleY(1); }
+  .opt.selected {
+    border-color: var(--accent2); background: rgba(168,125,232,0.15);
+    color: var(--highlight); padding-left: 22px;
+  }
+  .opt.selected::before { transform: scaleY(1); background: var(--accent2); }
+
+  .opt-letter {
+    display: inline-block; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--border); font-size: 11px; font-weight: 700;
+    text-align: center; line-height: 22px; margin-right: 10px;
+    color: var(--subtext); flex-shrink: 0;
+    transition: background .22s, color .22s;
+  }
+  .opt:hover .opt-letter, .opt.selected .opt-letter {
+    background: var(--accent); color: #fff;
+  }
+
+  .btn-next {
+    margin-top: 8px; padding: 13px 36px; border-radius: 10px; border: none;
+    background: var(--accent); color: #fff; font-size: 15px; font-weight: 600;
+    cursor: pointer; opacity: 0; pointer-events: none;
+    transition: opacity .3s, transform .2s, background .2s;
+    align-self: flex-end;
+  }
+  .btn-next.show { opacity: 1; pointer-events: all; }
+  .btn-next:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  /* ─── RESULT ───────────────────────────────────────────── */
+  .result-card {
+    width: 100%; background: var(--card);
+    border: 1px solid var(--border); border-radius: 24px;
+    padding: 40px 32px; text-align: center;
+    box-shadow: 0 0 60px var(--glow), 0 8px 40px rgba(0,0,0,0.5);
+    animation: popIn .6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.88); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .result-tag {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 18px; display: block;
+  }
+  .result-img-wrap {
+    position: relative; margin: 0 auto 24px;
+    width: 220px; height: 300px;
+    border-radius: 20px; overflow: hidden;
+    border: 2px solid var(--border);
+    box-shadow: 0 0 40px var(--glow), 0 8px 32px rgba(0,0,0,0.6);
+    background: linear-gradient(160deg, #1a1a35 0%, #0d0d1a 100%);
+  }
+  .result-img-wrap::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 60px;
+    background: linear-gradient(to top, var(--card), transparent);
+    pointer-events: none;
+  }
+  .result-img {
+    width: 100%; height: 100%; object-fit: cover; object-position: top center;
+    display: block;
+  }
+  .result-img-fallback {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center; font-size: 64px;
+  }
+  .result-name {
+    font-size: 34px; font-weight: 700; margin-bottom: 6px;
+    background: linear-gradient(135deg, #e8d5ff, #a87de8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .result-romaji { color: var(--subtext); font-size: 13px; margin-bottom: 20px; letter-spacing: 2px; }
+  .result-tagline {
+    font-size: 16px; color: var(--highlight); font-style: italic;
+    background: rgba(124,92,191,0.1); border-left: 3px solid var(--accent);
+    padding: 12px 18px; border-radius: 0 10px 10px 0; margin-bottom: 28px;
+    text-align: left;
+  }
+  .result-divider {
+    height: 1px; background: var(--border); margin: 4px 0 24px; border: none;
+  }
+  .result-reason-title {
+    font-size: 12px; letter-spacing: 2px; color: var(--accent);
+    margin-bottom: 14px; text-transform: uppercase;
+  }
+  .result-reasons { text-align: left; display: flex; flex-direction: column; gap: 12px; }
+  .reason-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--card2); border-radius: 10px; padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
+  .reason-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .reason-text { font-size: 14px; color: var(--text); line-height: 1.65; }
+
+  .score-bar-wrap { margin-top: 30px; }
+  .score-title { font-size: 12px; letter-spacing: 2px; color: var(--accent); margin-bottom: 14px; text-transform: uppercase; }
+  .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .score-char { font-size: 13px; color: var(--subtext); width: 88px; text-align: right; flex-shrink: 0; white-space: nowrap; }
+  .score-track { flex: 1; height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #7c5cbf, #a87de8); transition: width 1s ease; }
+  .score-pct { font-size: 12px; color: var(--subtext); width: 32px; flex-shrink: 0; }
+
+  .btn-retry {
+    margin-top: 32px; padding: 13px 36px; border-radius: 10px; border: 1px solid var(--border);
+    background: transparent; color: var(--subtext); font-size: 14px;
+    cursor: pointer; transition: all .2s;
+  }
+  .btn-retry:hover { border-color: var(--accent); color: var(--accent2); }
+
+  /* ─── MISC ─────────────────────────────────────────────── */
+  .footer { margin-top: 28px; color: var(--border); font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ INTRO ══════════════ -->
+<div class="screen active" id="screen-intro">
+  <div class="intro-badge">MyGO!!!!! 人格测试</div>
+  <h1 class="intro-title">你更像 MyGO 中的谁？</h1>
+  <p class="intro-sub">
+    9道问题，没有对错，只有真实。<br>
+    跟着直觉走，看看你的灵魂与哪位成员最为共鸣。
+  </p>
+  <div class="intro-chars">
+    <span class="char-chip">高松灯</span>
+    <span class="char-chip">千早爱音</span>
+    <span class="char-chip">稚名立希</span>
+    <span class="char-chip">长崎素世</span>
+    <span class="char-chip">要乐奈</span>
+    <span class="char-chip">丰川祥子</span>
+  </div>
+  <button class="btn-start" onclick="startQuiz()">开始测试</button>
+  <div class="footer">BanG Dream! It's MyGO!!!!! &nbsp;·&nbsp; 非官方测试</div>
+</div>
+
+<!-- ══════════════ QUIZ ══════════════ -->
+<div class="screen" id="screen-quiz">
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+    <span class="progress-label" id="prog-label">1 / 9</span>
+  </div>
+  <div class="q-card">
+    <span class="q-tag" id="q-tag">Q1</span>
+    <p class="q-text" id="q-text"></p>
+    <div class="options" id="options"></div>
+  </div>
+  <button class="btn-next" id="btn-next" onclick="nextQuestion()">下一题 →</button>
+</div>
+
+<!-- ══════════════ RESULT ══════════════ -->
+<div class="screen" id="screen-result">
+  <div class="result-card" id="result-card"></div>
+  <button class="btn-retry" onclick="retryQuiz()">↺ 再测一次</button>
+  <div class="footer">BanG Dream! It's MyGO!!!!! &nbsp;·&nbsp; 非官方测试</div>
+</div>
+
+<script>
+// ──────────────── DATA ────────────────
+// Characters: 0=灯 1=爱音 2=立希 3=素世 4=乐奈 5=祥子
+const BASE_MYGO = 'https://en.bang-dream.com/wordpress/wp-content/themes/en_bang-dream_v0/assets/images/common/anime/mygo/';
+const BASE_AVE  = 'https://en.bang-dream.com/wordpress/wp-content/themes/en_bang-dream_v0/assets/images/common/anime/avemujica/';
+
+const CHARS = [
+  { name: '高松灯',   romaji: 'Takamatsu Tomori', emoji: '🌙', img: BASE_MYGO + 'img_tomori.png',
+    tagline: '"我只是想让大家听到……那个声音。"',
+    traits: ['创作型感性灵魂', '内向而情感浓烈', '用艺术表达无法言说的东西'],
+    reasons: {
+      icon: ['✍️','🌊','🫧'],
+      text: [
+        '你对内心世界的感受极为敏锐，习惯将情绪转化为某种具体的形式——文字、旋律或图像。即便旁人觉得晦涩，你也不愿将感受简化。',
+        '你并非不想与人连接，而是常常找不到合适的词汇。这种"溢出"的情感，正是灯写词时的状态——满载却无处安放，直到音乐给了它出口。',
+        '你独处时最自在，但真正的羁绊一旦形成，就会在你心底留下难以磨灭的印记。'
+      ]
+    }
+  },
+  { name: '千早爱音', romaji: 'Chihaya Anon', emoji: '⚡', img: BASE_MYGO + 'img_anon.png',
+    tagline: '"我才不是在迎合谁，我只是想找到真正的自己！"',
+    traits: ['外向活泼的社交达人', '敏感而渴望被真实接纳', '勇于跌倒后重新出发'],
+    reasons: {
+      icon: ['🌟','🪞','🏃'],
+      text: [
+        '你天生擅长与人打成一片，快速融入新环境，但内心深处其实一直在问：他们喜欢的是真实的我，还是那个努力表演的我？这正是爱音的核心矛盾。',
+        '你害怕被看穿，所以用热情和幽默作为屏障。然而一旦找到真正信任的人，你会毫无保留——这份反差，正是爱音最动人的地方。',
+        '你不服输，就算跌倒也要站得比倒下时更响亮。这股韧劲让你周围的人都不自觉地被你带动。'
+      ]
+    }
+  },
+  { name: '稚名立希', romaji: 'Shiina Taki', emoji: '🎸', img: BASE_MYGO + 'img_taki.png',
+    tagline: '"不用说太多，做就好了。"',
+    traits: ['沉默而可靠的支柱', '以行动代替言语', '内心温柔却不轻易示人'],
+    reasons: {
+      icon: ['⚓','🤫','🛡️'],
+      text: [
+        '你话不多，但从不缺席。你用实际行动让周围的人感到被支撑，而不是用言语。立希的"在场感"——就是你给人的感觉。',
+        '你有自己清晰的原则和底线，一旦认定重要的事，就会默默坚守，不需要别人认可。这种自我稳定感，让人在动荡时也愿意靠近你。',
+        '表面的平静之下，有着不轻易示人的柔软。只有真正熟悉你的人，才知道你藏在心底的那份温度。'
+      ]
+    }
+  },
+  { name: '长崎素世', romaji: 'Nagasaki Soyo', emoji: '🌸', img: BASE_MYGO + 'img_soyo.png',
+    tagline: '"我只是……不想让重要的东西消失。"',
+    traits: ['优雅复杂的内心世界', '观察力与掌控欲并存', '深藏真实情感的守护者'],
+    reasons: {
+      icon: ['🔍','🧊','💜'],
+      text: [
+        '你给人的第一印象是体贴、得体，甚至有些距离感——但这背后是你对人际关系的高度敏感与精准感知。你比任何人都清楚房间里的情绪流向。',
+        '你并非冷漠，而是习惯将自己的脆弱保护起来，用优雅的姿态应对一切。只有在极少数时刻，真实的情感才会浮出水面——那一瞬，才是最真实的你。',
+        '你深深在意某些人和某些羁绊，正因为在意，才会用复杂的方式守护。素世式的爱，是悄悄把你放进心里，然后不动声色地不让你离开。'
+      ]
+    }
+  },
+  { name: '要乐奈',   romaji: 'Kaname Raana', emoji: '🥁', img: BASE_MYGO + 'img_rana.png',
+    tagline: '"有趣的事情，我都想去感受一下。"',
+    traits: ['自由随性的直觉型', '不被常规束缚的独行者', '用本能感知世界的灵魂'],
+    reasons: {
+      icon: ['🌀','🎯','🦋'],
+      text: [
+        '你不按剧本行事，跟着感觉走——这不是随便，而是一种极度诚实的生活方式。乐奈的"随性"背后是极强的自我认知：她清楚自己想要什么，不需要解释。',
+        '你对世界的感受是直觉型的，不喜欢过度分析，也不在意别人怎么解读你。这种不被定义的状态，反而让你比大多数人更自由。',
+        '你不会主动寻找羁绊，但一旦被什么打动，就会以最纯粹的方式投入。乐奈打鼓时的专注，就是你进入自己世界时的样子。'
+      ]
+    }
+  },
+  { name: '丰川祥子', romaji: 'Togawa Sakiko', emoji: '🎹', img: BASE_AVE + 'img_nomal_sakiko.png',
+    tagline: '"如果我能重来……但也许，我只能继续往前走。"',
+    traits: ['承担一切的成熟领导者', '背负愧疚却仍守护他人', '最深的情感藏于最稳的外表下'],
+    reasons: {
+      icon: ['🏛️','💔','🕯️'],
+      text: [
+        '你习惯把责任揽到自己身上，甚至在事情还没出问题时就已经开始担心。这不是软弱，而是因为你太在乎那些重要的人，舍不得让他们受伤。',
+        '你有过去的某些遗憾，它们安静地待在心底，偶尔在深夜浮现。你没有忘记，也没有放下，但你选择继续前行——这正是祥子的方式。',
+        '表面上你最稳，但你给予别人的温度，其实来自你自己最脆弱的那部分。你用自己的创伤，构筑了保护他人的盔甲。'
+      ]
+    }
+  }
+];
+
+const QUESTIONS = [
+  {
+    text: '当你有强烈的情绪涌现时，你通常会……',
+    opts: [
+      { text: '写下来，变成文字、旋律或某种创作', c: 0 },
+      { text: '找人倾诉，但又怕说出来显得矫情', c: 1 },
+      { text: '自己默默消化，不想打扰任何人', c: 2 },
+      { text: '用优雅的方式掩藏，保持表面平静', c: 3 },
+      { text: '跟着感觉走，做点什么消耗掉它', c: 4 },
+      { text: '把精力转移到照顾别人上', c: 5 },
+    ]
+  },
+  {
+    text: '你理想的周末是哪种画面？',
+    opts: [
+      { text: '独处在房间里搞创作，时间飞逝', c: 0 },
+      { text: '约一堆朋友出门，热闹到深夜', c: 1 },
+      { text: '安安静静做自己的事，不被打扰', c: 2 },
+      { text: '去精致的咖啡厅读书或听音乐', c: 3 },
+      { text: '说走就走，不提前计划，随便去哪', c: 4 },
+      { text: '把待办事项全处理完，再彻底放松', c: 5 },
+    ]
+  },
+  {
+    text: '在一个陌生的聚会中，你更可能……',
+    opts: [
+      { text: '躲在角落，偶尔说出一句让人愣住的话', c: 0 },
+      { text: '主动打破沉默，很快和大家玩在一起', c: 1 },
+      { text: '安静地观察，话少但让人莫名觉得可靠', c: 2 },
+      { text: '礼貌得体地与每个人交谈，掌握全场动态', c: 3 },
+      { text: '做自己的，对有趣的人主动搭话，无聊就走', c: 4 },
+      { text: '照顾大家的情绪，确保没人被冷落', c: 5 },
+    ]
+  },
+  {
+    text: '遇到一首瞬间击中你的歌，你会……',
+    opts: [
+      { text: '反复听，把歌词抄下来，写下自己的感悟', c: 0 },
+      { text: '立刻发给朋友："你一定要听！！"', c: 1 },
+      { text: '悄悄收藏，一个人在某个夜晚单曲循环', c: 2 },
+      { text: '分析编曲和结构，欣赏其工艺', c: 3 },
+      { text: '就是感觉对了，没想那么多，再放一遍', c: 4 },
+      { text: '想起了某些人，心里一阵说不清的酸', c: 5 },
+    ]
+  },
+  {
+    text: '你最深层的困扰，更接近哪一个？',
+    opts: [
+      { text: '脑子里有很多东西，但总无法准确表达出来', c: 0 },
+      { text: '害怕别人看穿那个努力伪装的自己', c: 1 },
+      { text: '不知道如何主动向他人靠近', c: 2 },
+      { text: '担心自己的真实动机被人误解', c: 3 },
+      { text: '其实没什么特别烦恼……也许这本身就是种烦恼', c: 4 },
+      { text: '无法从过去的某件事里完全走出来', c: 5 },
+    ]
+  },
+  {
+    text: '如果你加入一支乐队，你最理想的角色是？',
+    opts: [
+      { text: '主唱兼作词，把灵魂装进歌里', c: 0 },
+      { text: '负责宣传推广，让更多人认识我们', c: 1 },
+      { text: '贝斯，是那个支撑全队却不抢风头的人', c: 2 },
+      { text: '吉他兼编曲，把混乱变成有层次的美', c: 3 },
+      { text: '鼓手，用身体感受节奏，打到忘我', c: 4 },
+      { text: '键盘兼队长，统筹全局，保护每一个人', c: 5 },
+    ]
+  },
+  {
+    text: '你如何理解"羁绊"这件事？',
+    opts: [
+      { text: '是灵魂之间的共鸣，可遇不可求', c: 0 },
+      { text: '需要主动争取，不努力就会失去', c: 1 },
+      { text: '不用多说，用时间和陪伴来证明', c: 2 },
+      { text: '珍贵，但也可能成为彼此的牵绊', c: 3 },
+      { text: '缘分到了自然就有，强求反而会变味', c: 4 },
+      { text: '是最重要的东西，但我总怕自己会搞砸', c: 5 },
+    ]
+  },
+  {
+    text: '别人对你的第一印象，通常是……',
+    opts: [
+      { text: '有点奇怪，但很有个性，说话方式很独特', c: 0 },
+      { text: '活泼开朗，很好相处，能带动气氛', c: 1 },
+      { text: '沉默寡言，难以读懂，但让人觉得安心', c: 2 },
+      { text: '优雅得体，有距离感，像是精心维护的形象', c: 3 },
+      { text: '神秘随性，行事不按常理，很难预测', c: 4 },
+      { text: '可靠成熟，给人一种"交给她没问题"的感觉', c: 5 },
+    ]
+  },
+  {
+    text: '下面哪句话，最接近你的人生信条？',
+    opts: [
+      { text: '"把所有感受都变成声音，哪怕只有一个人听懂。"', c: 0 },
+      { text: '"我一定要找到真正的自己，不管要花多久。"', c: 1 },
+      { text: '"少说多做。陪伴，就是答案。"', c: 2 },
+      { text: '"优雅地承受一切，不让人看见裂缝。"', c: 3 },
+      { text: '"跟着感觉走，没有错的路，只有没走完的路。"', c: 4 },
+      { text: '"无论如何，我都要保护重要的人。"', c: 5 },
+    ]
+  }
+];
+
+// ──────────────── STATE ────────────────
+let scores = [0, 0, 0, 0, 0, 0];
+let current = 0;
+let selected = null;
+
+// ──────────────── LOGIC ────────────────
+function startQuiz() {
+  scores = [0, 0, 0, 0, 0, 0];
+  current = 0;
+  selected = null;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  const letters = ['A','B','C','D','E','F'];
+  selected = null;
+
+  document.getElementById('q-tag').textContent = `Q${current + 1}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('prog-label').textContent = `${current + 1} / ${QUESTIONS.length}`;
+  document.getElementById('prog-fill').style.width = `${(current / QUESTIONS.length) * 100}%`;
+
+  const btn = document.getElementById('btn-next');
+  btn.classList.remove('show');
+  btn.textContent = current === QUESTIONS.length - 1 ? '查看结果 ✨' : '下一题 →';
+
+  const container = document.getElementById('options');
+  container.innerHTML = '';
+  // Shuffle options for variety
+  const shuffled = [...q.opts].sort(() => Math.random() - 0.5);
+  shuffled.forEach((opt, i) => {
+    const el = document.createElement('button');
+    el.className = 'opt';
+    el.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt.text}`;
+    el.onclick = () => selectOption(el, opt.c, container);
+    container.appendChild(el);
+  });
+}
+
+function selectOption(el, charIdx, container) {
+  container.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selected = charIdx;
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function nextQuestion() {
+  if (selected === null) return;
+  scores[selected] += 1;
+  current++;
+  if (current >= QUESTIONS.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  const maxScore = Math.max(...scores);
+  // Tie-breaking: use slight randomness among tied top scores
+  const topIdxs = scores.map((s, i) => ({ s, i })).filter(x => x.s === maxScore);
+  const winner = topIdxs[Math.floor(Math.random() * topIdxs.length)].i;
+  const char = CHARS[winner];
+
+  // Build score bars
+  const total = scores.reduce((a, b) => a + b, 0) || 1;
+  const scoreHTML = CHARS.map((c, i) => `
+    <div class="score-row">
+      <span class="score-char">${c.name}</span>
+      <div class="score-track">
+        <div class="score-fill" style="width:${Math.round(scores[i]/total*100)}%"></div>
+      </div>
+      <span class="score-pct">${Math.round(scores[i]/total*100)}%</span>
+    </div>
+  `).join('');
+
+  const reasonsHTML = char.reasons.icon.map((icon, i) => `
+    <div class="reason-item">
+      <span class="reason-icon">${icon}</span>
+      <span class="reason-text">${char.reasons.text[i]}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('result-card').innerHTML = `
+    <span class="result-tag">测试结果</span>
+    <div class="result-img-wrap">
+      <img class="result-img" src="${char.img}" alt="${char.name}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="result-img-fallback" style="display:none">${char.emoji}</div>
+    </div>
+    <div class="result-name">${char.name}</div>
+    <div class="result-romaji">${char.romaji}</div>
+    <p class="result-tagline">${char.tagline}</p>
+    <hr class="result-divider">
+    <div class="result-reason-title">为什么是你</div>
+    <div class="result-reasons">${reasonsHTML}</div>
+    <div class="score-bar-wrap">
+      <div class="score-title">各成员契合度</div>
+      ${scoreHTML}
+    </div>
+  `;
+
+  showScreen('screen-result');
+  // Animate score bars
+  setTimeout(() => {
+    document.querySelectorAll('.score-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0';
+      setTimeout(() => { el.style.width = w; }, 50);
+    });
+  }, 100);
+}
+
+function retryQuiz() {
+  startQuiz();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
